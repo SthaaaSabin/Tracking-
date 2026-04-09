@@ -7,56 +7,40 @@ export const metadata: Metadata = {
     'James Hargrove has spent three decades listening to and serving our community. Learn about his vision, values, and how you can get involved.',
   openGraph: {
     title: 'James Hargrove for State Senate',
-    description:
-      'Three decades of service. A steady hand. A future worth fighting for.',
+    description: 'Three decades of service. A steady hand. A future worth fighting for.',
     type: 'website',
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         {/*
          * ═══════════════════════════════════════════════════════════════════
-         *  META PIXEL – HOW IT WORKS (READ THIS FIRST)
+         *  META PIXEL — TEMPORARILY DISABLED (Demo / Mock Mode Active)
          * ═══════════════════════════════════════════════════════════════════
          *
-         *  The flow this pixel tracks:
+         *  The Meta Pixel script below is commented out because the Meta
+         *  Business/Ad account is currently restricted.
          *
-         *  1. FACEBOOK / INSTAGRAM AD or POST
-         *     └─ A supporter sees or shares a post about the campaign.
+         *  A LOCAL MOCK TRACKER is active instead (see LandingPage.tsx).
+         *  It simulates the same event flow and stores events in localStorage.
          *
-         *  2. CLICK → WEBSITE LINK
-         *     └─ They click the link in the post/ad (fb_source parameter is
-         *        automatically appended by Meta's platform).
+         *  TO RESTORE REAL META PIXEL:
+         *   1. Uncomment the <script> block below
+         *   2. Replace PLACEHOLDER_PIXEL_ID with your real Meta Pixel ID
+         *   3. In LandingPage.tsx, set DEMO_MODE = false (or swap trackEvent
+         *      calls back to the Meta Pixel helpers)
          *
-         *  3. LAND ON THIS PAGE
-         *     └─ Their browser loads this page. The pixel script below fires
-         *        immediately and executes fbq('init', …).
+         *  The flow this pixel tracks (for reference):
+         *   Facebook/Instagram ad → user clicks link → lands here
+         *   → Pixel fires: PageView, LearnMoreClick, SupportInterest, LeadSubmitted
          *
-         *  4. PIXEL TRACKS WEBSITE ACTIVITY ONLY
-         *     └─ From this point on the pixel only tracks what happens ON
-         *        THIS WEBSITE — button clicks, form views, form submissions.
-         *        It does NOT spy on what the visitor does elsewhere.
-         *
-         *  Events tracked:
-         *    • PageView       – fires automatically on load (LandingPage.tsx)
-         *    • LearnMoreClick – when visitor clicks "Learn More" in the hero
-         *    • SupportInterest– when visitor clicks "I'm Interested" in the hero
-         *    • LeadSubmitted  – when the interest form is successfully submitted
-         *
-         * ═══════════════════════════════════════════════════════════════════
-         *  TO ACTIVATE:
-         *    Replace  PLACEHOLDER_PIXEL_ID  with your actual Meta Pixel ID.
-         *    You can find it in Meta Business Suite → Events Manager → Pixels.
-         *    Example: fbq('init', '1234567890123456');
          * ═══════════════════════════════════════════════════════════════════
          */}
+
+        {/* --- Uncomment below when Meta account is restored ---
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -68,26 +52,15 @@ export default function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-
-              /* ── Initialize your pixel (replace ID below) ── */
               fbq('init', 'PLACEHOLDER_PIXEL_ID');
-
-              /* NOTE: PageView is fired inside LandingPage.tsx via useEffect
-                 so it respects Next.js client-side rendering properly.       */
             `,
           }}
         />
-        {/* NoScript fallback – still fires a PageView for non-JS browsers */}
         <noscript>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            height="1"
-            width="1"
-            style={{ display: 'none' }}
-            alt=""
-            src="https://www.facebook.com/tr?id=PLACEHOLDER_PIXEL_ID&ev=PageView&noscript=1"
-          />
+          <img height="1" width="1" style={{ display: 'none' }} alt=""
+            src="https://www.facebook.com/tr?id=PLACEHOLDER_PIXEL_ID&ev=PageView&noscript=1" />
         </noscript>
+        --- End Meta Pixel block --- */}
       </head>
       <body className="bg-cream-50 text-stone-800 font-sans antialiased">
         {children}
