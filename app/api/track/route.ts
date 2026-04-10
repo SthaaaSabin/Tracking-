@@ -19,7 +19,7 @@ import { cookies } from 'next/headers'
 //      await supabase.from('events').insert(event)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { ServerEvent, eventStore } from '../store'
+import { ServerEvent, eventStore } from '../../../lib/eventStore'
 
 // ─── Helper: read or create a visitor-ID cookie ──────────────────────────────
 function getVisitorId(request: NextRequest): { visitorId: string; isNew: boolean } {
