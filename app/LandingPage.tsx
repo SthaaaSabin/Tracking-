@@ -67,12 +67,27 @@ let onNewEvent: (() => void) | null = null
 //     In DEMO_MODE  → stores to localStorage + logs to console
 //     In LIVE_MODE  → calls fbq() (real Meta Pixel)
 //
+//     In BOTH modes → fires a non-blocking POST to /api/track so all visitor
+//     events are also stored server-side and visible in /admin.
+//
 //     Usage:
 //       trackEvent('PageView')
 //       trackEvent('LearnMoreClick', { location: 'hero' })
 //       trackEvent('LeadSubmitted',  { has_phone: true })
 //
 const trackEvent = (name: string, meta?: Record<string, unknown>) => {
+  // ── Always: fire-and-forget POST to server ──────────────────────────────────
+  //    We deliberately do NOT await this — it must never block the UI.
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name,
+      timestamp: new Date().toISOString(),
+      meta: meta ?? {},
+    }),
+  }).catch(() => { /* silent — server tracking is best-effort */ })
+
   if (DEMO_MODE) {
     // ── MOCK: store locally ──
     const event: DemoEvent = {
@@ -411,6 +426,9 @@ export default function LandingPage() {
     setIsSubmitting(true)
     await new Promise(r => setTimeout(r, 1200)) // simulated async call
     trackEvent('LeadSubmitted', {
+      // Include name & email so they appear in the admin dashboard
+      name:        formData.name.trim(),
+      email:       formData.email.trim(),
       has_phone:   !!formData.phone.trim(),
       lead_source: 'landing_page',
       method:      'website_form',
