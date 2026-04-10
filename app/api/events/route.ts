@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { eventStore } from '../track/route'
+import { eventStore } from '../store'
 
 // ─── Secret key — change this in production ───────────────────────────────────
 //     Access via: /api/events?key=demo123

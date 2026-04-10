@@ -19,26 +19,7 @@ import { cookies } from 'next/headers'
 //      await supabase.from('events').insert(event)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export interface ServerEvent {
-  id:        string
-  name:      string
-  timestamp: string
-  visitorId: string
-  userAgent: string
-  referrer:  string
-  meta?:     Record<string, unknown>
-}
-
-// In-memory store — shared across requests in the same Node.js process.
-// This will reset on redeploy. See note above for persistent alternatives.
-declare global {
-  // eslint-disable-next-line no-var
-  var __trackingEvents: ServerEvent[] | undefined
-}
-if (!global.__trackingEvents) {
-  global.__trackingEvents = []
-}
-export const eventStore = global.__trackingEvents
+import { ServerEvent, eventStore } from '../store'
 
 // ─── Helper: read or create a visitor-ID cookie ──────────────────────────────
 function getVisitorId(request: NextRequest): { visitorId: string; isNew: boolean } {
